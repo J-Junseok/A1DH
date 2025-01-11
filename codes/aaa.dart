@@ -30,6 +30,19 @@ class _LogInState extends State<LogIn> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+
+    // FocusNode의 상태 변화 감지
+    _idFocusNode.addListener(() {
+      setState(() {}); // 상태 변화 시 화면 갱신
+    });
+    _passwordFocusNode.addListener(() {
+      setState(() {}); // 상태 변화 시 화면 갱신
+    });
+  }
+
+  @override
   void dispose() {
     // 위젯이 사라질 때 FocusNode도 해제해줍니다
     _idFocusNode.dispose();
@@ -54,34 +67,32 @@ class _LogInState extends State<LogIn> {
             children: [
               // 로고
               Padding(
-                padding: EdgeInsets.only(top: screenHeight * 0.1), // 상단 여백
+                padding: EdgeInsets.only(top: screenHeight * 0.1),
                 child: Center(
                   child: Image.asset(
-                    'assets/images/dohands_logo.png', // 로고 이미지 경로
-                    width: screenWidth * 0.4, // 화면 너비의 40%
+                    'assets/images/dohands_logo.png',
+                    width: screenWidth * 0.4,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-
               // 안내 텍스트
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05, // 좌우 여백
-                  vertical: screenHeight * 0.05, // 상하 여백
+                  horizontal: screenWidth * 0.05,
+                  vertical: screenHeight * 0.05,
                 ),
                 child: Text(
                   '회원 서비스 이용을 위해 로그인 해주세요.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF414141),
-                    fontSize: screenWidth * 0.04, // 화면 너비 기준 폰트 크기
+                    fontSize: screenWidth * 0.04,
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Pretendard',
                   ),
                 ),
               ),
-
               // 아이디 입력 필드
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -97,13 +108,18 @@ class _LogInState extends State<LogIn> {
                   decoration: ShapeDecoration(
                     color: Color(0xFFFFF7F5),
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 2, color: Color(0xFFFF5C35)),
+                      side: BorderSide(
+                        width: 2,
+                        color: _idFocusNode.hasFocus
+                            ? Color(0xFFFF5C35)
+                            : Colors.grey, // 선택 상태에 따라 색상 변경
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: TextField(
-                    controller: _idController, // 아이디 입력을 위한 컨트롤러
-                    focusNode: _idFocusNode, // 아이디 입력 필드에 포커스를 줍니다
+                    controller: _idController,
+                    focusNode: _idFocusNode,
                     decoration: InputDecoration(
                       hintText: '아이디',
                       border: InputBorder.none,
@@ -117,7 +133,6 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
               ),
-
               // 비밀번호 입력 필드
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -133,13 +148,19 @@ class _LogInState extends State<LogIn> {
                   decoration: ShapeDecoration(
                     color: Color(0xFFFFF8F6),
                     shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                        width: 2,
+                        color: _passwordFocusNode.hasFocus
+                            ? Color(0xFFFF5C35)
+                            : Colors.grey, // 선택 상태에 따라 색상 변경
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: TextField(
-                    controller: _passwordController, // 비밀번호 입력을 위한 컨트롤러
-                    obscureText: true, // 비밀번호는 입력할 때 가리기
-                    focusNode: _passwordFocusNode, // 비밀번호 입력 필드에 포커스를 줍니다
+                    controller: _passwordController,
+                    obscureText: true,
+                    focusNode: _passwordFocusNode,
                     decoration: InputDecoration(
                       hintText: '비밀번호',
                       border: InputBorder.none,
@@ -153,7 +174,6 @@ class _LogInState extends State<LogIn> {
                   ),
                 ),
               ),
-
               // 로그인 버튼
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -182,18 +202,9 @@ class _LogInState extends State<LogIn> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        // 로그인 버튼 클릭 시 처리 로직
                         final id = _idController.text;
                         final password = _passwordController.text;
                         print('아이디: $id, 비밀번호: $password');
-
-                        // 로그인 후 다음 화면으로 이동
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NextScreen(), // 이동할 화면
-                          ),
-                        );
                       },
                       child: Text(
                         '로그인하기',
@@ -212,19 +223,6 @@ class _LogInState extends State<LogIn> {
           ),
         ),
       ),
-    );
-  }
-}
-
-// 로그인 후 이동할 화면
-class NextScreen extends StatelessWidget {
-  const NextScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('다음 화면')),
-      body: Center(child: Text('다음 화면입니다!')),
     );
   }
 }
