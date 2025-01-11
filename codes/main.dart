@@ -205,6 +205,13 @@ class _LogInState extends State<LogIn> {
                         final id = _idController.text;
                         final password = _passwordController.text;
                         print('아이디: $id, 비밀번호: $password');
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NextScreen(), // 이동할 화면
+                          ),
+                        );
                       },
                       child: Text(
                         '로그인하기',
@@ -223,6 +230,17 @@ class _LogInState extends State<LogIn> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class NextScreen extends StatelessWidget {
+  const NextScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('다음 화면')),
+      body: Center(child: Text('다음 화면입니다!')),
     );
   }
 }
